@@ -19,3 +19,12 @@ And similarly for the space based optimisation folder
 We use python v3.6.3 available from https://www.python.org/.
 
 ## File Descriptions
+
+The following scripts are used to generate data and figures in the paper and can be used to reproduce the paper results. Note that many of these scripts take significant time to run due to the number of simulation realisations and the optimisations carried out. All other files provide additional code that is described within the file.
+
+- `lag_time_analysis.py`  Used to generate data and figures for supplementary figure S7, comparing timing of deterministic and stochastic analogues
+- `make_network.py`       Used to randomise the network setup and host risk groups
+- `make_paper_figs.py`    This is used to generate most of the data and figures from the paper. Run with `-h` option for more info
+- `profile_likelihoods.py`    Used to generate profile likelihood plots in supplementary material, verifying accuracy of the MLE fits. Supplementary figures S5 and S6
+- `risk_split_scan.py`    Used to scan over control allocation to each risk group to find optimal constant split. Supplementary material figure S8
+- `risk_switch_scan.py`   Used to scan over risk group switch time. Supplementary figure S11
