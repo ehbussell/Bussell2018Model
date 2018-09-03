@@ -1,6 +1,5 @@
 """Code for running network based simulation model using direct Gillespie algorithm."""
 
-import pdb
 import warnings
 from collections import namedtuple
 from operator import add

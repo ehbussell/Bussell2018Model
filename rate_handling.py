@@ -142,8 +142,10 @@ class RateHandler:
 
         # Initialise rates
         for i, node in enumerate(nodes):
-            n_high = node.state[simulation.State.SUS_H] + node.state[simulation.State.INF_H] + node.state[simulation.State.VAC_H]
-            n_low = node.state[simulation.State.SUS_L] + node.state[simulation.State.INF_L] + node.state[simulation.State.VAC_L]
+            n_high = (node.state[simulation.State.SUS_H] + node.state[simulation.State.INF_H] +
+                      node.state[simulation.State.VAC_H])
+            n_low = (node.state[simulation.State.SUS_L] + node.state[simulation.State.INF_L] +
+                     node.state[simulation.State.VAC_L])
 
             self.rate_structures[simulation.Event.BIRTH_H].insert_rate(i, n_high)
             self.rate_structures[simulation.Event.BIRTH_L].insert_rate(i, n_low)
@@ -153,22 +155,30 @@ class RateHandler:
 
             for j, node2 in enumerate(nodes):
                 self.inf_press[simulation.Risk.HIGH, i] += dist_coupling[i, j] * (
-                    risk_coupling[simulation.Risk.HIGH, simulation.Risk.HIGH] * node2.state[simulation.State.INF_H] +
-                    risk_coupling[simulation.Risk.HIGH, simulation.Risk.LOW] * node2.state[simulation.State.INF_L])
+                    risk_coupling[simulation.Risk.HIGH, simulation.Risk.HIGH] *
+                    node2.state[simulation.State.INF_H] +
+                    risk_coupling[simulation.Risk.HIGH, simulation.Risk.LOW] *
+                    node2.state[simulation.State.INF_L])
 
                 self.inf_press[simulation.Risk.LOW, i] += dist_coupling[i, j] * (
-                    risk_coupling[simulation.Risk.LOW, simulation.Risk.LOW] * node2.state[simulation.State.INF_L] +
-                    risk_coupling[simulation.Risk.LOW, simulation.Risk.HIGH] * node2.state[simulation.State.INF_H])
+                    risk_coupling[simulation.Risk.LOW, simulation.Risk.LOW] *
+                    node2.state[simulation.State.INF_L] +
+                    risk_coupling[simulation.Risk.LOW, simulation.Risk.HIGH] *
+                    node2.state[simulation.State.INF_H])
 
             self.rate_structures[simulation.Event.INF_H].insert_rate(
                 i, self.inf_press[simulation.Risk.HIGH, i] * node.state[simulation.State.SUS_H])
             self.rate_structures[simulation.Event.INF_L].insert_rate(
                 i, self.inf_press[simulation.Risk.LOW, i] * node.state[simulation.State.SUS_L])
 
-            self.rate_structures[simulation.Event.REM_H].insert_rate(i, node.state[simulation.State.INF_H])
-            self.rate_structures[simulation.Event.REM_L].insert_rate(i, node.state[simulation.State.INF_L])
-            self.rate_structures[simulation.Event.REC_H].insert_rate(i, node.state[simulation.State.INF_H])
-            self.rate_structures[simulation.Event.REC_L].insert_rate(i, node.state[simulation.State.INF_L])
+            self.rate_structures[simulation.Event.REM_H].insert_rate(
+                i, node.state[simulation.State.INF_H])
+            self.rate_structures[simulation.Event.REM_L].insert_rate(
+                i, node.state[simulation.State.INF_L])
+            self.rate_structures[simulation.Event.REC_H].insert_rate(
+                i, node.state[simulation.State.INF_H])
+            self.rate_structures[simulation.Event.REC_L].insert_rate(
+                i, node.state[simulation.State.INF_L])
 
             self.rate_structures[simulation.Event.VAC_H].insert_rate(
                 i, self.vac_rates[simulation.Risk.HIGH, i] * node.state[simulation.State.SUS_H])

@@ -1,9 +1,7 @@
 """Generate figures for paper."""
 
-import pdb
 import copy
 import os
-import warnings
 import pickle
 import argparse
 import numpy as np
@@ -11,14 +9,14 @@ import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import matplotlib as mpl
 
-import simulation, risk_model, fit_risk_model, fitting, control_tools, visualisation, space_model, fit_space_model
-import optimise_risk
-from simulation import State, Risk
+import simulation, risk_model, fitting, control_tools, visualisation, space_model
+from simulation import State
+import risk_split_scan
 
 def make_data(nruns=10, reuse_fitter=False, skip_risk_mpc=False, skip_space_mpc=False,
               check_data=None):
     """Generate all data for figures.
-    
+
     Arguments:
         nruns           Number of simulation runs for each control strategy
         reuse_fitter    Whether to reuse previous fits. If so take from Data/Fit/FitData.pickle
@@ -54,7 +52,7 @@ def make_data(nruns=10, reuse_fitter=False, skip_risk_mpc=False, skip_space_mpc=
                 # within region connections
                 dist = np.linalg.norm(node1.position - node2.position)
                 dist_coupling[i, j] = np.exp(-dist / scale)
-    
+
     for k, l in [(17, 20), (18, 21), (19, 22), (32, 52), (33, 53), (34, 54)]:
         # between region connections
         dist_coupling[l, k] = 0.1
@@ -165,7 +163,7 @@ def make_data(nruns=10, reuse_fitter=False, skip_risk_mpc=False, skip_space_mpc=
     if check_data is None:
         # Get optimal constant split strategy balancing high and low control
         print("Optimising constant risk split strategy")
-        min_prop = optimise_risk.make_data(
+        min_prop = risk_split_scan.make_data(
             fitter, setup, model_params['state_init'], num_props=101, nruns=1000)
         setup['risk_min_prop'] = min_prop
     else:
@@ -316,11 +314,9 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
         'population_vmax': 100,
         'show_dpcs': True,
         'alpha': 0.2,
-        'show_dpcs': True,
         'dpc_data': all_data['sim_no_control'][0:20],
         'regions': ["A", "B", "C"],
         'inf_vmax': 0.05,
-        # 'inf_cmap': mpl.colors.ListedColormap(plt.get_cmap("YlOrRd")(np.linspace(0.4, 0.8, 101))),
         'inf_cmap': mpl.colors.ListedColormap(["orange", "red"]),
         'node_alpha': 0.75,
         'min_node_radius': 0.025,
@@ -369,7 +365,7 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
     all_names.append("Space MPC")
     iqr_segments.append([[[i+4, np.percentile(x, 25)], [i+4, np.percentile(x, 75)]]
                          for i, x in enumerate(all_objectives[4:6])])
-    
+
     all_objectives.append([np.sum(x.objective) for x in all_data['sim_no_control']])
     all_names.append("No Control")
 
@@ -462,8 +458,9 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
 
     visualisation.plot_control(
         all_data['sim_' + name + '_mpc'][mpc_idx], all_data['setup']['end_time'],
-        comparison=all_data[name + '_model_opt'].control, ax=ax2, comparison_args={'label': 'OL', 'linestyle': (0, (1, 1))},
-        colors=["red", "skyblue"], alpha=0.4)
+        comparison=all_data[name + '_model_opt'].control, ax=ax2,
+        comparison_args={'label': 'OL', 'linestyle': (0, (1, 1))}, colors=["red", "skyblue"],
+        alpha=0.4)
 
     ax2.scatter(update_times, [-0.05]*len(update_times), s=10, facecolor="k",
                 edgecolor="k", linewidth=0, zorder=10, clip_on=False)
@@ -479,7 +476,8 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
     ax3.set_ylabel("Number Infected")
     ax3.set_title("Open-loop (OL)")
 
-    ax4.plot(sim_mpc_times, sim_mpc_inf_h+sim_mpc_inf_l, color="red", linestyle="steps-post", alpha=0.3)
+    ax4.plot(sim_mpc_times, sim_mpc_inf_h+sim_mpc_inf_l, color="red", linestyle="steps-post",
+             alpha=0.3)
 
     for times, inf_h, inf_l in zip(pre_mpc_times, pre_mpc_inf_h, pre_mpc_inf_l):
         ax4.plot(times, np.array(inf_h)+np.array(inf_l), '--', linewidth=1.0, color="red")
@@ -620,11 +618,11 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
             'r--', lw=2)
     fig.savefig(os.path.join("Figures", "SuppFig4.pdf"), dpi=600)
 
-    # Figure S7
-    # Risk Split Scan
-    optimise_risk.make_fig(os.path.join("Data", "RiskOptimisation.npz"))
-
     # Figure S8
+    # Risk Split Scan
+    risk_split_scan.make_fig(os.path.join("Data", "RiskOptimisation.npz"))
+
+    # Figure S9
     # Comparison of optimal controls - risk vs space based
     fig = plt.figure()
     gs = gridspec.GridSpec(3, 2, height_ratios=[1, 0.01, 1], width_ratios=[1, 1.2])
@@ -674,9 +672,9 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
     fig.text(0.42, 0.96, "(c)", transform=fig.transFigure, fontsize=11, fontweight="semibold")
 
     fig.tight_layout()
-    fig.savefig(os.path.join("Figures", "SuppFig8.pdf"), dpi=600, bbox_inches='tight')
+    fig.savefig(os.path.join("Figures", "SuppFig9.pdf"), dpi=600, bbox_inches='tight')
 
-    # Figure S9
+    # Figure S10
     # Histogram of illustrative model strategy results
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -703,7 +701,7 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
     ax.set_ylabel("Cumulative Probability")
     ax.set_ylim([-0.05, 1.05])
     fig.tight_layout()
-    fig.savefig(os.path.join("Figures", "SuppFig9.pdf"), dpi=600)
+    fig.savefig(os.path.join("Figures", "SuppFig10.pdf"), dpi=600)
 
     ########################
     ## Diagnostic Figures ##
@@ -747,8 +745,10 @@ def make_plots(all_data, skip_risk_mpc=False, skip_space_mpc=False):
     fig, reg_axes, glob_axes = visualisation.plot_dpc_data(
         nodes, all_data['sim_space_opt'][0:20], options=viz_options, nruns=20)
     for i in range(6):
-        reg_axes[i].plot(times, [all_data['space_model_opt'].state(t)[3*i] for t in times], 'g--', lw=2)
-        reg_axes[i].plot(times, [all_data['space_model_opt'].state(t)[3*i+1] for t in times], 'r--', lw=2)
+        reg_axes[i].plot(times, [all_data['space_model_opt'].state(t)[3*i] for t in times], 'g--',
+                         lw=2)
+        reg_axes[i].plot(times, [all_data['space_model_opt'].state(t)[3*i+1] for t in times], 'r--',
+                         lw=2)
         reg_axes[i].plot(times, [all_data['space_model_opt'].state(t)[3*i+2] for t in times], '--',
                          color="purple", lw=2)
     for risk in range(2):
