@@ -1,0 +1,86 @@
+# This file defines all dimensions and parameters
+# values for your problem :
+
+# Initial and final time :
+time.free string none
+time.initial double 4.5
+time.final double 4.949999999999998
+
+# Dimensions :
+state.dimension integer 7
+control.dimension integer 2
+algebraic.dimension integer 0
+parameter.dimension integer 0
+constant.dimension integer 19
+boundarycond.dimension integer 7
+constraint.dimension integer 1
+
+# Discretization :
+discretization.steps integer 9
+discretization.method string gauss
+
+# Optimization :
+optimization.type string single
+batch.type integer 0
+batch.index integer 0
+batch.nrange integer 1
+batch.lowerbound double 0
+batch.upperbound double 0
+batch.directory string none
+
+# Initialization :
+# initialization.type string from_init_file
+# initialization.file string none
+initialization.type string from_sol_file_cold
+initialization.file string FullSol.sol
+
+# Parameter identification :
+paramid.type string false
+paramid.separator string ,
+paramid.file string no_directory
+paramid.dimension integer 0
+
+# Names :
+state.0 string Sus_H
+state.1 string Inf_H
+state.2 string Vac_H
+state.3 string Sus_L
+state.4 string Inf_L
+state.5 string Vac_L
+state.6 string Integrand
+control.0 string Control_H
+control.1 string Control_L
+boundarycond.0 string Sus_H_0
+boundarycond.1 string Inf_H_0
+boundarycond.2 string Vac_H_0
+boundarycond.3 string Sus_L_0
+boundarycond.4 string Inf_L_0
+boundarycond.5 string Vac_L_0
+boundarycond.6 string Integrand_0
+constraint.0 string Budget
+constant.0 string birth_rate
+constant.1 string death_rate
+constant.2 string rem_rate
+constant.3 string rec_rate
+constant.4 string max_control_rate
+constant.5 string beta_HH
+constant.6 string beta_HL
+constant.7 string beta_LH
+constant.8 string beta_LL
+constant.9 string sus_pow_HH
+constant.10 string sus_pow_HL
+constant.11 string sus_pow_LH
+constant.12 string sus_pow_LL
+constant.13 string inf_pow_HH
+constant.14 string inf_pow_HL
+constant.15 string inf_pow_LH
+constant.16 string inf_pow_LL
+constant.17 string high_alloc_cost
+constant.18 string low_alloc_cost
+
+# Solution file :
+solution.file string problem.sol
+
+# Iteration output frequency :
+iteration.output.frequency integer 0
+

@@ -1,0 +1,5 @@
+max_iter 10000
+print_level 5
+tol 1.0e-6
+mu_strategy adaptive
+output_file result.out

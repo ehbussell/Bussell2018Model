@@ -1,0 +1,21 @@
+#Starting point file
+# This file contains the values of the initial points
+# for variable state #17
+
+# Type of initialization :
+linear
+
+# Number of interpolation points :
+10
+
+# Interpolation points :
+4.5 0.0
+4.55 7.9
+4.6 15.76
+4.6499999999999995 23.23
+4.699999999999999 30.68
+4.749999999999999 37.69
+4.799999999999999 44.72
+4.849999999999999 51.27
+4.899999999999999 57.92
+4.949999999999998 63.34

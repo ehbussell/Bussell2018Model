@@ -1,0 +1,113 @@
+# This file defines all dimensions and parameters
+# values for your problem :
+
+# Initial and final time :
+time.free string none
+time.initial double 4.5
+time.final double 4.949999999999998
+
+# Dimensions :
+state.dimension integer 19
+control.dimension integer 6
+algebraic.dimension integer 0
+parameter.dimension integer 0
+constant.dimension integer 20
+boundarycond.dimension integer 19
+constraint.dimension integer 1
+
+# Discretization :
+discretization.steps integer 9
+discretization.method string gauss
+
+# Optimization :
+optimization.type string single
+batch.type integer 0
+batch.index integer 0
+batch.nrange integer 1
+batch.lowerbound double 0
+batch.upperbound double 0
+batch.directory string none
+
+# Initialization :
+initialization.type string from_init_file
+initialization.file string none
+
+# Parameter identification :
+paramid.type string false
+paramid.separator string ,
+paramid.file string no_directory
+paramid.dimension integer 0
+
+# Names :
+state.0 string Sus_H1
+state.1 string Inf_H1
+state.2 string Vac_H1
+state.3 string Sus_L1
+state.4 string Inf_L1
+state.5 string Vac_L1
+state.6 string Sus_H2
+state.7 string Inf_H2
+state.8 string Vac_H2
+state.9 string Sus_L2
+state.10 string Inf_L2
+state.11 string Vac_L2
+state.12 string Sus_H3
+state.13 string Inf_H3
+state.14 string Vac_H3
+state.15 string Sus_L3
+state.16 string Inf_L3
+state.17 string Vac_L3
+state.18 string Integrand
+control.0 string Control_H1
+control.1 string Control_L1
+control.2 string Control_H2
+control.3 string Control_L2
+control.4 string Control_H3
+control.5 string Control_L3
+boundarycond.0 string Sus_H1_0
+boundarycond.1 string Inf_H1_0
+boundarycond.2 string Vac_H1_0
+boundarycond.3 string Sus_L1_0
+boundarycond.4 string Inf_L1_0
+boundarycond.5 string Vac_L1_0
+boundarycond.6 string Sus_H2_0
+boundarycond.7 string Inf_H2_0
+boundarycond.8 string Vac_H2_0
+boundarycond.9 string Sus_L2_0
+boundarycond.10 string Inf_L2_0
+boundarycond.11 string Vac_L2_0
+boundarycond.12 string Sus_H3_0
+boundarycond.13 string Inf_H3_0
+boundarycond.14 string Vac_H3_0
+boundarycond.15 string Sus_L3_0
+boundarycond.16 string Inf_L3_0
+boundarycond.17 string Vac_L3_0
+constraint.0 string Budget
+constant.0 string birth_rate
+constant.1 string death_rate
+constant.2 string rem_rate
+constant.3 string rec_rate
+constant.4 string max_control_rate
+constant.5 string sigma_11
+constant.6 string sigma_12
+constant.7 string sigma_13
+constant.8 string sigma_21
+constant.9 string sigma_22
+constant.10 string sigma_23
+constant.11 string sigma_31
+constant.12 string sigma_32
+constant.13 string sigma_33
+constant.14 string rho_HH
+constant.15 string rho_HL
+constant.16 string rho_LH
+constant.17 string rho_LL
+constant.18 string high_alloc_cost
+constant.19 string low_alloc_cost
+
+# Solution file :
+solution.file string problem.sol
+
+# Iteration output frequency :
+iteration.output.frequency integer 0
+
+initialization.file string none
